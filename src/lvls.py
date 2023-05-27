@@ -1,4 +1,4 @@
-from pygame import mouse, draw
+from pygame import mouse, draw, event
 from colours import Colour as C
 
 
@@ -30,33 +30,25 @@ class Ball:
 class Lvls:
     def __init__(self, screen):
         self.screen = screen
+        self.ball = Ball(100, 100, 10, screen)
 
-        self.holeR = 20
 
 class Lvl1(Lvls):
     def __init__(self, screen):
         super().__init__(screen)
-        self.ball = Ball(100, 100, 10, self.screen)
-    
-    def draw(self):
+        self.x1, self.y1 = 0, 0
+        self.x2, self.y2 = 0, 0
+
+        self.mouseDown = False
+
+    def draw(self, mouseDown):
         self.ball.draw()
+        self.x1, self.y1 = mouse.get_pos()
 
-        draw.circle(self.screen, C.DARK_GREY, (self.x, self.y), self.holeR)
+        self.x2, self.y2 = mouse.get_pos()
+        draw.line(self.screen, C.WHITE, (self.x1, self.y1), (self.x2, self.y2), 5)
 
-
-class Lvl2(Lvls):
-    def __init__(self, screen):
-        super().__init__(screen)
-        pass
+        if (mouseDown):
+            draw.line(self.screen, C.WHITE, (self.x1, self.y1), (self.x2, self.y2), 5)
     
-    def draw(self):
-        pass
 
-
-class Lvl3(Lvls):
-    def __init__(self, screen):
-        super().__init__(screen)
-        pass
-    
-    def draw(self):
-        pass
