@@ -20,6 +20,10 @@ class Game:
     def __init__(self):
         self.running = True
         self.mouseDown = False
+        self.mouseReleased = False
+
+        self.m1 = (0, 0)
+        self.m2 = (0, 0)
 
         self.scene = 0
         self.grass = pygame.image.load("assets/miniGolfGrass.jpg")
@@ -34,21 +38,21 @@ class Game:
         self.lvls = Lvls(screen)
         self.lvl1 = Lvl1(screen)
 
-    def draw(self, mouseDown):
+    def draw(self):
         screen.fill(C.DARK_GREY)
         screen.blit(self.grass, (0, 0))
         pygame.draw.rect(screen, C.WALL, (0, 0, x, y), x//20)
 
-        self.drawScene(self.scene, mouseDown)
+        self.drawScene(self.scene)
 
         pygame.display.update()
         clock.tick(fps)
 
-    def drawScene(self, scene, mouseDown):
+    def drawScene(self, scene):
         if (scene == 0):
             self.drawMenu()
         elif (scene == 1):
-            self.drawGame(mouseDown)
+            self.drawGame()
         elif (scene == 2):
             self.drawEnd()
 
@@ -56,16 +60,16 @@ class Game:
         if (self.startButton.draw(screen)):
             self.scene = 1
 
-    def drawGame(self, mouseDown):
+    def drawGame(self):
         if (self.lvl == 1):
-            self.lvl1.draw(mouseDown)
+            self.mouseReleased = self.lvl1.draw(self.mouseDown, self.mouseReleased, self.m1)
     
     def drawEnd(self):
         pass
 
     def run(self):
         while (self.running):
-            self.draw(self.mouseDown)
+            self.draw()
             
             for event in pygame.event.get():
                 if (event.type == pygame.QUIT):
@@ -77,7 +81,11 @@ class Game:
                 # --- Mouse Events --- #
                 if (event.type == pygame.MOUSEBUTTONDOWN):
                     self.mouseDown = True
+                    self.m1 = pygame.mouse.get_pos()
                 
                 if (event.type == pygame.MOUSEBUTTONUP):
                     self.mouseDown = False
+                    self.m2 = pygame.mouse.get_pos()
+
+                    self.mouseReleased = True
          
