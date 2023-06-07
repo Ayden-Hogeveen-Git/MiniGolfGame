@@ -1,4 +1,4 @@
-from pygame import mouse, draw
+from pygame import mouse, draw, font
 from colours import Colour as C
 from math import atan2, pi, sin, cos
 
@@ -13,6 +13,9 @@ class Ball:
         # Ball Physics
         self.angle = 0
         self.magnitude = 0
+
+        self.dirX = 1
+        self.dirY = 1
 
         self.surface = surface
         self.colour = colour
@@ -86,6 +89,12 @@ class Lvls:
     def __init__(self, screen):
         self.screen = screen
         self.ball = Ball(100, 100, 10, screen)
+
+        self.shotCount = 0
+
+        self.font = font.Font("freesansbold.ttf", screen.get_width() // 20)
+        self.text = self.font.render(f"Shots: {self.shotCount}", True, C.WHITE)
+        self.textRect = (0, 0, screen.get_width(), screen.get_height())
         
         self.x1, self.y1 = 0, 0
 
@@ -104,6 +113,8 @@ class Lvl1(Lvls):
         """
         self.ball.draw()
 
+        self.screen.blit(self.text, self.textRect)
+
         self.x1, self.y1 = mouse.get_pos()
 
         if (mouseDown):
@@ -117,6 +128,10 @@ class Lvl1(Lvls):
             self.ball.magnitude = self.ball.getMagnitude(m1, (self.x1, self.y1))
 
             print(f"Angle: {self.ball.angle}\nMagnitude: {self.ball.magnitude}\n")
+
+            if (self.ball.magnitude > 0):
+                self.shotCount += 1
+                self.text = self.font.render(f"Shots: {self.shotCount}", True, C.WHITE)
 
             self.ball.move(cos(self.ball.angle) * self.ball.magnitude, sin(self.ball.angle) * self.ball.magnitude)
 

@@ -6,7 +6,7 @@ pygame.init()
 
 
 # --- Setup Variables --- #
-x, y = 800, 600
+x, y = 960, 720
 title = "MiniGolf"
 fps = 60
 
@@ -88,4 +88,4 @@ class Game:
                     self.m2 = pygame.mouse.get_pos()
 
                     self.mouseReleased = True
-         
+
